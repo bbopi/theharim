@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE HARIM</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        .square {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            background-color: #333;
+            transition: transform 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Hellow World</h1>
+    </div>
+    <div id="scene"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        let squares = [];
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        function createSquares() {
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            
+            for (let i = 0; i < 100; i++) {
+                const cube = new THREE.Mesh(geometry, material);
+                cube.position.set(Math.random() * 5, Math.random() * 5, Math.random() * 5);
+                scene.add(cube);
+                squares.push(cube);
+            }
+        }
+
+        createSquares();
+
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // 큐브가 흩어졌다가 다시 모이는 애니메이션
+            squares.forEach((square, index) => {
+                square.position.x += Math.sin(index) * 0.01;
+                square.position.y += Math.cos(index) * 0.01;
+            });
+
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
